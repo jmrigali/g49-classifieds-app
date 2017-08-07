@@ -1,2 +1,117 @@
+<main class="container">
+  <h1>g49 Classifieds</h1>
+  <div class="pull-right">
+    <p><a class="btn btn-info" name="newClassifiedButton" ng-click="$ctrl.setTab()">New Classified</a></p>
+  </div>
+  <ul class="nav nav-pills">
+  <li role="presentation" class="active">
 
-  <h1>Hello World!</h1>
+    <input type="search" class="form-control input-sm search-form" placeholder="Filter" ng-model="query.title">
+  </li>
+  <li class="dropdown form-inline" ng-init="sort='title' ; sortName='Title'">
+     <a href="#"
+       class="dropdown-toggle"
+       data-toggle="dropdown"
+       role="button"
+       aria-haspopup="true"
+       aria-expanded="false">Sort By {{sortName}}<span class="caret"></span></a>
+     <ul class="dropdown-menu">
+       <li><a ng-click="sort='price' ; sortName='Price'">Price</a></li>
+       <li><a ng-click="sort='title' ; sortName='Title'">Title</a></li>
+     </ul>
+   </li>
+</ul>
+  <div class="row" ng-if="$ctrl.tab==true">
+    <div class="col-md-8">
+      <form novalidate name="$ctrl.newClassifiedPost" ng-submit="$ctrl.createPost()">
+
+        <div ng-class="{'has-error':$ctrl.newClassifiedPost.title.$invalid}">
+          <label for="title">Title</label>
+          <input id="title" class="form-control" name="title" ng-model="$ctrl.post.title" ng-minlength="5" required>
+          <span class="label label-danger" ng-show="$ctrl.newClassifiedPost.title.$invalid && $ctrl.newClassifiedPost.title.$touched">Not valid</span>
+        </div>
+        <div>
+          <label for="description">Description</label>
+          <textarea id="description" name="body" class="form-control" ng-model="$ctrl.post.description" ng-minlength="5" required></textarea>
+          <span class="label label-danger" ng-show="$ctrl.newClassifiedPost.description.$invalid">Not valid</span>
+        </div>
+
+        <div>
+          <label for="price">Price</label>
+          <input id="price" name="price" class="form-control" ng-model="$ctrl.post.price" ng-minlength="2" required>
+          <span class="label label-danger" ng-show="$ctrl.newClassifiedPost.price.$invalid">Not valid</span>
+        </div>
+
+        <div>
+          <label for="item_image">Item Image</label>
+          <input id="item_image" name="url" class="form-control" ng-model="$ctrl.post.item_image" ng-minlength="5" required>
+          <span class="label label-danger" ng-show="$ctrl.newClassifiedPost.item_image.$invalid">Not valid</span>
+        </div>
+
+        <div class="form-group">
+          <button ng-disabled="$ctrl.newClassifiedPost.$invalid" type="submit" class="btn btn-primary">
+          Create Classified
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div ng-repeat="post in $ctrl.posts | filter: query | orderBy: sort" class="row">
+   <div class="col-md-12">
+     <div class="well">
+       <div class="media-left">
+         <img class="media-object" ng-src="{{post.item_image}}">
+       </div>
+
+       <div class="media-body">
+         <h4 class="media-heading">
+         {{post.title}}
+         </h4>
+         <div class="text-right">
+         ${{post.price}}
+         </div>
+         <p>
+         {{post.description}}
+         </p>
+
+       <button id="edit" ng-click = "$ctrl.getPost(post)" class="btn btn-primary">Edit</button>
+       <div class="row" ng-if="post.show == true">
+         <div class="col-md-8">
+           <form novalidate name="post.editClassifiedPost" ng-submit="$ctrl.editClassified(post)">
+
+             <div ng-class="{'has-error':post.editClassifiedPost.title.$invalid}">
+               <label for="title">Title</label>
+               <input id="title" class="form-control" name="title" ng-model="post.title" ng-minlength="5" required>
+               <span class="label label-danger" ng-show="$post.editClassifiedPost.title.$invalid && post.editClassifiedPost.title.$touched">Not valid</span>post
+             </div>
+             <div>
+               <label for="description">Description</label>
+               <textarea id="description" name="body" class="form-control" ng-model="post.description" ng-minlength="5" required></textarea>
+               <span class="label label-danger" ng-show="post.editClassifiedPost.description.$invalid">Not valid</span>
+             </div>
+
+             <div>
+               <label for="price">Price</label>
+               <input id="price" name="price" class="form-control" ng-model="post.price" ng-minlength="1" required>
+               <span class="label label-danger" ng-show="post.editClassifiedPost.price.$invalid">Not valid</span>
+             </div>
+
+             <div>
+               <label for="item_image">Item Image</label>
+               <input id="item_image" name="url" class="form-control" ng-model="post.item_image" ng-minlength="5" required>
+               <span class="label label-danger" ng-show="post.editClassifiedPost.item_image.$invalid">Not valid</span>
+             </div>
+
+             <div class="form-group">
+               <button ng-disabled="post.editClassifiedPost.$invalid" type="submit" class="btn btn-success">
+               Edit Classified
+               </button>
+             </div>
+           </form>
+         </div>
+     </div>
+     <button class="btn btn-danger" ng-click="$ctrl.deleteClassified(post)">Delete</button>
+    </div>
+   </div>
+ </div>
+</main>
